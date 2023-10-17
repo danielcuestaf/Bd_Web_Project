@@ -137,7 +137,7 @@
             </div>
             <div class="alert alert-warning" id="alerta-w" role="alert"><strong>¡Peligro!</strong>El usuario ya existe,
               ¿desea
-              actulizar? <a href="./tabla.html" onclick="Bd_put()" class="alert-link text-center">SI</a>
+              actulizar? <a href="#" onclick="Bd_put()" class="alert-link text-center">SI</a>
             </div>
             <div class="alert alert-success" id="alerta-s" role="alert"><strong>¡Exito!</strong>
               Persona creada correctamente
@@ -242,22 +242,19 @@
         }
       })
         .then(function (response) {
-          // Comprobar el estatus de la respuesta
           if (response.status === 400) {
             $('#alerta-w').hide();
             $('#alerta-s').hide();
-            //alert("información faltante");
             $('#alerta-d').show();
           } else if (response.status === 409) {
             $('#alerta-d').hide();
             $('#alerta-s').hide();
-            //alert("Entrada duplicada, el registro ya existe.");
             $('#alerta-w').show();
           } else if (response.status === 201) {
             $('#alerta-d').hide();
             $('#alerta-w').hide();
-            //alert("Persona creada correctamente");
             $('#alerta-s').show();
+            //location.href = "./tabla.html";
           }
         })
         .catch(function (error) {
@@ -266,7 +263,43 @@
       e.preventDefault();
     });
   </script>
+  <script>
+    function Bd_put() {
+      const datos = new FormData(document.querySelector("form"))
+      const data = {
+        nombre: datos.get("nombre"),
+        nDoc: datos.get("nDoc"),
+        tipoDoc: datos.get("tipoDoc"),
+        apellido: datos.get("apellido"),
+        direccion: datos.get("direccion"),
+        correo: datos.get("correo"),
+        celular: datos.get("celular")
 
+      };
+      const jsonData = JSON.stringify(data);
+
+      const url = 'http://localhost:3000/api/personas/:' + datos.get("tipoDoc") + ':' + datos.get("nDoc");
+      alert(url);
+      const form = document.querySelector('form');
+      const options = {
+        method: 'PUT',
+        body: jsonData
+      };
+      fetch(url, options)
+      .then(function (response) {
+          if (response.status === 400) {
+            alert("400");
+          } else if (response.status === 500) {
+            alert("500");
+          } else if (response.status === 404) {
+            alert("404");
+            location.href = "./tabla.html";
+          }
+        })
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+    }
+  </script>
 </body>
 
 </html>

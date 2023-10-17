@@ -97,39 +97,11 @@
     <script>
         // Handler para el evento de respuesta de la petición
         document.querySelector("form").addEventListener("submit", function (e) {
-            // Enviar la petición al servidor
-            const datos = new FormData(document.querySelector("form"))
-            const data = {
-                nombre: datos.get("nombre"),
-                nDoc: datos.get("nDoc"),
-                tipoDoc: datos.get("tipoDoc"),
-                apellido: datos.get("apellido"),
-                direccion: datos.get("direccion"),
-                correo: datos.get("correo"),
-                celular: datos.get("celular")
-
-            };
-            const jsonData = JSON.stringify(data);
-
             fetch("http://localhost:3000/api/personas", {
-                method: "GET",
-                body: jsonData,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                method: "GET"
             })
                 .then(function (response) {
-                    // Comprobar el estatus de la respuesta
-                    if (response.status === 400) {
-                        //alert("información faltante");
-                        $('#alerta-d').show();
-                    } else if (response.status === 409) {
-                        //alert("Entrada duplicada, el registro ya existe.");
-                        $('#alerta-w').show();
-                    } else if (response.status === 201) {
-                        //alert("Persona creada correctamente");
-                        $('#alerta-s').show();
-                    }
+                    alert(response);
                 })
                 .catch(function (error) {
                     alert("Error en la petición");
