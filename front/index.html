@@ -133,17 +133,23 @@
               </p>
             </div>
             <!--alert-->
-            <div class="alert alert-warning alert-dismissible d-none" role="alert" id="alerta">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                  aria-hidden="true">&times;</span></button>
-              <strong>Peligro!</strong> El usuario ya existe, ¿desea actulizar? <a href="./tabla.html"
-                class="alert-link text-center">SI</a>
+            <div class="alert alert-danger" role="alert"><strong>¡Error!</strong> Información faltante
             </div>
+            <div class="alert alert-warning" role="alert"><strong>¡Peligro!</strong>El usuario ya existe, ¿desea
+              actulizar? <a href="./tabla.html" class="alert-link text-center">SI</a>
+            </div>
+            <div class="alert alert-success" role="alert"><strong>¡Exito!</strong>
+              Persona creada correctamente
+            </div>
+
           </div>
           <div class="col-md-5 col-md-pull-7">
             <div class="booking-form">
-
-              <form> <!--Aqui va para donde lo dirijo, la info-->
+              <form>
+          </div>
+          <div class="col-md-5 col-md-pull-7">
+            <div class="booking-form">
+              <form>
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="form-group">
@@ -202,7 +208,6 @@
                   <button class="submit-btn">Agregar</button>
                 </div>
               </form>
-
             </div>
           </div>
         </div>
@@ -231,21 +236,23 @@
       fetch("http://localhost:3000/api/personas", {
         method: "POST",
         body: jsonData,
-        headers :{
+        headers: {
           'Content-Type': 'application/json'
         }
       })
         .then(function (response) {
           // Comprobar el estatus de la respuesta
-          if (response.status === 409) {
+          if (response.status === 400) {
+            alert("información faltante");
+          } else if (response.status === 409) {
+            alert("Entrada duplicada, el registro ya existe.");
             document.querySelector("#alerta").classList.add("d-block");
-          } else {
-            alert("El formulario ya ha sido enviado.");
+          } else if (response.status === 201) {
+            alert("Persona creada correctamente");
           }
         })
         .catch(function (error) {
-          //alert("¡Ups! Ha ocurrido un error, intente nuevamente.");
-          alert(jsonData);
+          alert("¡Ups! Ha ocurrido un error en la conexion.");
         });
       e.preventDefault();
     });
