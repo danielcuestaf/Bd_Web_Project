@@ -23,34 +23,28 @@
 <body>
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading"><h1 class="text-center">Tabla de Resultados</h1></div>
+        <div class="panel-heading">
+            <h1 class="text-center">Tabla de Resultados</h1>
+        </div>
         <div class="panel-body">
             <form class="form-inline">
                 <div class="form-group">
-                    <label class="sr-only" for="exampleInputEmail3">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
+                    <label class="sr-only" for="documento">Documento</label>
+                    <input type="number" class="form-control" id="documento" placeholder="Documento" name="documento">
                 </div>
                 <div class="form-group">
-                    <label class="sr-only" for="exampleInputPassword3">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
+                    <span class="form-label">Tipo</span>
+                    <select class="form-control" name="tipoDoc">
+                        <option value="CC">Cedula</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="TE">Tarjeta de Extranjeria</option>
+                        <option value="CE">Cedula de Extranjeria</option>
+                        <option value="NIT">Nit</option>
+                        <option value="PAS">Pasaporte</option>
+                    </select>
+                    <span class="select-arrow"></span>
                 </div>
-                <div class="form-group">
-                    <label class="sr-only" for="exampleInputEmail3">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="exampleInputPassword3">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="exampleInputEmail3">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="exampleInputPassword3">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-default">Sign in</button>
+                <button type="submit" class="btn btn-default">Buscar</button>
             </form>
         </div>
 
@@ -98,6 +92,52 @@
             </tbody>
         </table>
     </div>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script>
+        // Handler para el evento de respuesta de la petición
+        document.querySelector("form").addEventListener("submit", function (e) {
+            // Enviar la petición al servidor
+            const datos = new FormData(document.querySelector("form"))
+            const data = {
+                nombre: datos.get("nombre"),
+                nDoc: datos.get("nDoc"),
+                tipoDoc: datos.get("tipoDoc"),
+                apellido: datos.get("apellido"),
+                direccion: datos.get("direccion"),
+                correo: datos.get("correo"),
+                celular: datos.get("celular")
+
+            };
+            const jsonData = JSON.stringify(data);
+
+            fetch("http://localhost:3000/api/personas", {
+                method: "GET",
+                body: jsonData,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(function (response) {
+                    // Comprobar el estatus de la respuesta
+                    if (response.status === 400) {
+                        //alert("información faltante");
+                        $('#alerta-d').show();
+                    } else if (response.status === 409) {
+                        //alert("Entrada duplicada, el registro ya existe.");
+                        $('#alerta-w').show();
+                    } else if (response.status === 201) {
+                        //alert("Persona creada correctamente");
+                        $('#alerta-s').show();
+                    }
+                })
+                .catch(function (error) {
+                    alert("Error en la petición");
+                });
+            e.preventDefault();
+        });
+    </script>
+
 </body>
 
 </html>
