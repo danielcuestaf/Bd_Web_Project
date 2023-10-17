@@ -215,9 +215,9 @@
   <script src="./js/jquery.min.js"></script>
   <script src="./js/bootstrap.min.js"></script>
   <script>
-     $('#alerta-d').hide();
-     $('#alerta-w').hide();
-     $('#alerta-s').hide();
+    $('#alerta-d').hide();
+    //$('#alerta-w').hide();
+    $('#alerta-s').hide();
     // Handler para el evento de respuesta de la petición
     document.querySelector("form").addEventListener("submit", function (e) {
       // Enviar la petición al servidor
@@ -244,12 +244,18 @@
         .then(function (response) {
           // Comprobar el estatus de la respuesta
           if (response.status === 400) {
+            $('#alerta-w').hide();
+            $('#alerta-s').hide();
             //alert("información faltante");
             $('#alerta-d').show();
           } else if (response.status === 409) {
+            $('#alerta-d').hide();
+            $('#alerta-s').hide();
             //alert("Entrada duplicada, el registro ya existe.");
             $('#alerta-w').show();
           } else if (response.status === 201) {
+            $('#alerta-d').hide();
+            $('#alerta-w').hide();
             //alert("Persona creada correctamente");
             $('#alerta-s').show();
           }
