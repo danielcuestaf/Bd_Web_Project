@@ -143,7 +143,7 @@
           <div class="col-md-5 col-md-pull-7">
             <div class="booking-form">
 
-              <form action="/api/personas" method="post"> <!--Aqui va para donde lo dirijo, la info-->
+              <form> <!--Aqui va para donde lo dirijo, la info-->
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="form-group">
@@ -215,9 +215,25 @@
     // Handler para el evento de respuesta de la petición
     document.querySelector("form").addEventListener("submit", function (e) {
       // Enviar la petición al servidor
-      fetch("/api/submit", {
+      const datos = new FormData(document.querySelector("form"))
+      const data = {
+        nombre: datos.get("nombre"),
+        nDoc: datos.get("nDoc"),
+        tipoDoc: datos.get("tipoDoc"),
+        apellido: datos.get("apellido"),
+        direccion: datos.get("direccion"),
+        correo: datos.get("correo"),
+        celular: datos.get("celular")
+
+      };
+      const jsonData = JSON.stringify(data);
+
+      fetch("http://localhost:3000/api/personas", {
         method: "POST",
-        body: new FormData(this),
+        body: jsonData,
+        headers :{
+          'Content-Type': 'application/json'
+        }
       })
         .then(function (response) {
           // Comprobar el estatus de la respuesta
@@ -228,7 +244,8 @@
           }
         })
         .catch(function (error) {
-         alert("¡Ups! Ha ocurrido un error, intente nuevamente.");
+          //alert("¡Ups! Ha ocurrido un error, intente nuevamente.");
+          alert(jsonData);
         });
       e.preventDefault();
     });
