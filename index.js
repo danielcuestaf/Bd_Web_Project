@@ -102,4 +102,22 @@ app.put('/api/personas/:tipoDoc/:nDoc', async (req, res) => {
     }
 })
 
+//trare tipos de documento 
+app.get('/api/tipodoc', async (req, res) => {
+    let result;
+    try {
+        connection = await db.abrirConexion()
+        result = await connection.execute(`SELECT * FROM tipoDoc`)
+    } catch (err) {
+        return res.send(err.message);
+    } finally {
+        await db.cerrarConexion(connection)
+        if (result.rows.length == 0) {
+            return res.send('no hay respuesta')
+        } else {
+            return res.send(result.rows)
+        }
+    }
+})
+
 app.listen(config.PORT, () => console.log("nodeOracleRestApi app listening on port %s!", config.PORT))
