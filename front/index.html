@@ -185,14 +185,7 @@
                   <div class="col-sm-4">
                     <div class="form-group">
                       <span class="form-label">Tipo</span>
-                      <select class="form-control" name="tipoDoc" required="required">
-                        <option value="CC">Cedula</option>
-                        <option value="TI">Tarjeta de Identidad</option>
-                        <option value="TE">Tarjeta de Extranjeria</option>
-                        <option value="CE">Cedula de Extranjeria</option>
-                        <option value="NIT">Nit</option>
-                        <option value="PAS">Pasaporte</option>
-                      </select>
+                      <select id="tipos" class="form-control" name="tipoDoc" required="required"></select>
                       <span class="select-arrow"></span>
                     </div>
                   </div>
@@ -263,6 +256,7 @@
       e.preventDefault();
     });
   </script>
+
   <script>
     function Bd_put() {
       const datos = new FormData(document.querySelector("form"))
@@ -278,27 +272,56 @@
       };
       const jsonData = JSON.stringify(data);
 
-      const url = 'http://localhost:3000/api/personas/:' + datos.get("tipoDoc") + ':' + datos.get("nDoc");
+      const url = 'http://localhost:3000/api/personas/' + datos.get("tipoDoc") + '/' + datos.get("nDoc");
       alert(url);
       const form = document.querySelector('form');
       const options = {
         method: 'PUT',
-        body: jsonData
+        body: jsonData,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       };
       fetch(url, options)
-      .then(function (response) {
+        .then(function (response) {
           if (response.status === 400) {
             alert("400");
           } else if (response.status === 500) {
             alert("500");
           } else if (response.status === 404) {
             alert("404");
+          } else if (response.status === 200) {
             location.href = "./tabla.html";
           }
         })
         .then(data => console.log(data))
         .catch(error => console.error(error));
     }
+  </script>
+
+  <script>
+
+    const traerDatos = async () => {
+      const response = await fetch('http://localhost:3000/api/tipodoc')
+      const data = await response.json()
+
+      console.log(data)
+      var miTipo = document.getElementById('tipos');
+
+      for (let i = 0; i < data.length; i++) {
+        miTipo.innerHTML += crearTipo(data[i])
+      }
+    }
+    traerDatos()
+
+    function crearTipo(tipo) {
+      return `<option value="${tipo[0]}">${tipo[1]}</option>`
+    }
+
+    e.preventDefault();
+
+
+
   </script>
 </body>
 
