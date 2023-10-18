@@ -20,44 +20,47 @@
     <meta name="robots" content="noindex, follow">
 </head>
 
-<body>
+<body style="padding-left: 50px;padding-right: 50px;">
     <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading">
-            <h1 class="text-center">Tabla de Resultados</h1>
+            <h1 class="text-center">Actividad Bases de Datos</h1>
         </div>
         <div class="panel-body">
-            <form class="form-inline">
+            <form class="form-inline" style="margin-bottom: 20px">
                 <div class="form-group">
                     <label class="sr-only" for="documento">Documento</label>
-                    <input type="number" class="form-control" id="documento" placeholder="Documento" name="documento">
+                    <input type="number" class="form-control"  id="documento" placeholder="Documento" name="documento">
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-left: 50px;">
                     <span class="form-label">Tipo</span>
                     <select id="tipos" class="form-control" name="tipoDoc"></select>
                     <span class="select-arrow"></span>
                 </div>
             </form>
-            <button onclick="traerPersona()" class="btn btn-default">Buscar</button>
-            <button onclick="traerPersonas()" class="btn btn-default">Todos</button>
-            <button onclick="location.href = './index.html'" class="btn btn-default">Agregar</button>
+            <button onclick="traerPersona()" class="btn btn-primary">Buscar</button>
+            <button onclick="traerPersonas()" class="btn btn-info ">Todos</button>
+            <button onclick="location.href = './index.html'" class="btn btn-success">Agregar</button>
         </div>
 
         <!-- Table -->
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Direccion</th>
-                    <th>Correo</th>
-                    <th>Celular</th>
-                </tr>
-            </thead>
-            <tbody id="tabla"></tbody>
-        </table>
+        <div >
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Documento</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Direccion</th>
+                        <th>Correo</th>
+                        <th>Celular</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla"></tbody>
+            </table>
+        </div>
+        
     </div>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
@@ -98,9 +101,13 @@
             }
         }
 
+        let contador = 0;
+
         function crearPersona(datoPersona) {
-            return `<tr id="persona">
-                    <td>${datoPersona[0]}</td>
+            contador += 1
+            if(contador%2 == 0 ){
+                return `<tr id="persona" class="info">
+                    <td >${datoPersona[0]}</td>
                     <td>${datoPersona[1]}</td>
                     <td>${datoPersona[2]}</td>
                     <td>${datoPersona[3]}</td>
@@ -108,6 +115,18 @@
                     <td>${datoPersona[5]}</td>
                     <td>${datoPersona[6]}</td>
                 </tr>`
+            }else{
+                return `<tr id="persona">
+                    <td >${datoPersona[0]}</td>
+                    <td>${datoPersona[1]}</td>
+                    <td>${datoPersona[2]}</td>
+                    <td>${datoPersona[3]}</td>
+                    <td>${datoPersona[4]}</td>
+                    <td>${datoPersona[5]}</td>
+                    <td>${datoPersona[6]}</td>
+                </tr>`
+            }
+            
         }
 
     </script>
@@ -136,7 +155,8 @@
     </script>
 
     <script>
-        const contador = 1
+        // Llama a la función cuando se carga la página
+        window.onload = traerPersonas();
     </script>
 
 </body>
