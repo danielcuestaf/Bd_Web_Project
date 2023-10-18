@@ -37,16 +37,18 @@
                     <select id="tipos" class="form-control" name="tipoDoc"></select>
                     <span class="select-arrow"></span>
                 </div>
-                <button type="submit" class="btn btn-default">Buscar</button>
             </form>
+            <button onclick="traerPersona()" class="btn btn-default">Buscar</button>
+            <button onclick="traerPersonas()" class="btn btn-default">Todos</button>
+            <button onclick="location.href = './index.html'" class="btn btn-default">Agregar</button>
         </div>
 
         <!-- Table -->
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Documento</th>
                     <th>Tipo</th>
+                    <th>Documento</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Direccion</th>
@@ -54,39 +56,12 @@
                     <th>Celular</th>
                 </tr>
             </thead>
-            <tbody id="tabla">
-                <tr class="info">
-                    <td>1193428015</td>
-                    <td>cc</td>
-                    <td>Juan</td>
-                    <td>Perez</td>
-                    <td>cr 34</td>
-                    <td>jnP@c.om</td>
-                    <td>225</td>
-                </tr>
-                <tr>
-                    <td>123</td>
-                    <td>cc</td>
-                    <td>Juan</td>
-                    <td>Perez</td>
-                    <td>cr 34</td>
-                    <td>jnP@c.om</td>
-                    <td>225</td>
-                </tr>
-                <tr class="info">
-                    <td>1193428015</td>
-                    <td>cc</td>
-                    <td>Juan</td>
-                    <td>Perez</td>
-                    <td>cr 34</td>
-                    <td>jnP@c.om</td>
-                    <td>225</td>
-                </tr>
-            </tbody>
+            <tbody id="tabla"></tbody>
         </table>
     </div>
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+
     <script>
         // Handler para el evento de respuesta de la petición
         const traerTipo = async () => {
@@ -106,21 +81,22 @@
             return `<option value="${tipo[0]}">${tipo[1]}</option>`
         }
 
-        e.preventDefault();
     </script>
+
     <script>
-        const traerPersonas = async () => {
+        async function traerPersonas() {
+
             const response = await fetch('http://localhost:3000/api/personas')
             const data = await response.json()
-
             console.log(data)
             var miTabla = document.getElementById('tabla');
-
+            while (miTabla.firstChild) {
+                miTabla.removeChild(miTabla.firstChild);
+            }
             for (let i = 0; i < data.length; i++) {
                 miTabla.innerHTML += crearPersona(data[i])
             }
         }
-        traerPersonas()
 
         function crearPersona(datoPersona) {
             return `<tr id="persona">
@@ -134,40 +110,33 @@
                 </tr>`
         }
 
-        e.preventDefault();
     </script>
 
     <script>
 
-        document.querySelector("form").addEventListener("submit", function (e) {
-            
-            const traerPersonasr = async () => {
-                const response = await fetch(`http://localhost:3000/api/personas/${}`)
-                const data = await response.json()
+        const traerPersona = async () => {
 
-                console.log(data)
-                var miTabla = document.getElementById('tabla');
+            const selectElement = document.getElementById("tipos");
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const selectedValue = selectedOption.value;
+            const response = await fetch(`http://localhost:3000/api/personas/${selectedValue}/${document.getElementById("documento").value}`)
+            const data = await response.json()
 
-                for (let i = 0; i < data.length; i++) {
-                    miTabla.innerHTML += crearPersona(data[i])
-                }
-            }
-        })
-
-
-        function crearPersona(datoPersona) {
-                return `<tr id="persona">
-                    <td>${datoPersona[0]}</td>
-                    <td>${datoPersona[1]}</td>
-                    <td>${datoPersona[2]}</td>
-                    <td>${datoPersona[3]}</td>
-                    <td>${datoPersona[4]}</td>
-                    <td>${datoPersona[5]}</td>
-                    <td>${datoPersona[6]}</td>
-                </tr>`
+            console.log(data)
+            var miTabla = document.getElementById('tabla');
+            while (miTabla.firstChild) {
+                miTabla.removeChild(miTabla.firstChild);
             }
 
-        e.preventDefault();
+            for (let i = 0; i < data.length; i++) {
+                miTabla.innerHTML += crearPersona(data[i])
+            }
+        }
+
+    </script>
+
+    <script>
+        const contador = 1
     </script>
 
 </body>

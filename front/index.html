@@ -135,14 +135,14 @@
             <!--alert-->
             <div class="alert alert-danger" id="alerta-d" role="alert"><strong>¡Error!</strong> Información faltante
             </div>
-            <div class="alert alert-warning" id="alerta-w" role="alert"><strong>¡Peligro!</strong>El usuario ya existe,
+            <div class="alert alert-warning" id="alerta-w" role="alert"><strong>¡Peligro!</strong> El usuario ya existe,
               ¿desea
-              actulizar? <a href="#" onclick="Bd_put()" class="alert-link text-center">SI</a>
+              actulizar?<a href="#" onclick="Bd_put()" class="alert-link text-center">SI</a><br>En caso contrario por favor ingrese un documento que no este repetido.
             </div>
             <div class="alert alert-success" id="alerta-s" role="alert"><strong>¡Exito!</strong>
               Persona creada correctamente
             </div>
-
+          
           </div>
           <div class="col-md-5 col-md-pull-7">
             <div class="booking-form">
@@ -196,6 +196,7 @@
                 </div>
                 <div class="form-btn text-center">
                   <button class="submit-btn">Agregar</button>
+                  <button type="button" class="submit-btn" onclick="location.href = './tabla.html'" >Volver</button>
                 </div>
               </form>
             </div>
